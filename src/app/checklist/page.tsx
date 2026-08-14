@@ -32,11 +32,12 @@ export default function ChecklistPage() {
         alert('체크리스트가 성공적으로 저장되었습니다.');
         router.push('/');
       } else {
-        const err = await response.json();
-        alert('저장 중 오류가 발생했습니다: ' + err.error);
+        const err = await response.json().catch(() => ({ error: '서버 응답 파싱 실패' }));
+        alert('저장 중 오류가 발생했습니다: ' + (err.error || response.statusText));
       }
     } catch (error: any) {
-      alert('요청 중 오류가 발생했습니다.');
+      console.error(error);
+      alert('요청 중 오류가 발생했습니다: ' + (error.message || error));
     } finally {
       setLoading(false);
     }
